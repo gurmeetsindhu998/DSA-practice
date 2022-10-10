@@ -1,0 +1,143 @@
+#include<iostream>
+using namespace std;
+
+class Node{
+    public:
+
+    int data;
+    Node* next;
+    Node( int d){
+     this -> data = d;
+     this -> next = NULL;
+    }
+    ~Node(){
+        int value = this -> data;
+        if (this -> next != NULL){
+            delete next;
+            this -> next = NULL;
+            }
+    }};
+    
+
+    void insertAthead( Node* &head, int value){
+        Node* temp = new Node(value);
+        temp -> next = head;
+        head = temp;
+
+    }
+
+    void insertAttail( Node* &tail, int value){
+        Node* temp = new Node(value);
+        tail ->next = temp;
+        tail = temp;
+
+    }
+
+    void printnfo(Node* &head ){
+        if (head == NULL){
+            cout<<"empty"<<endl;}
+        Node* temp = head;
+        while (temp != NULL){
+            cout<< temp -> data<< " ";
+            temp= temp -> next;
+        }
+    }
+    
+    void insertatposi( Node* &tail, Node* &head, int posi, int value){
+        if (posi == 1){
+            insertAthead(head, value);
+            return;
+        }
+        Node* temp = head;
+        int cou = 1;
+        while(cou< posi-1 ){
+            temp= temp ->next;
+            cou++;
+        }
+        if( temp -> next == NULL){
+            insertAttail(tail, value);
+            return;
+        }
+        Node* nodetoinsert= new Node(value);
+        nodetoinsert -> next = temp ->next;
+        temp -> next= nodetoinsert;
+    }
+
+    void deleteatposi(Node* &head, int posi){
+        if(posi == 1){
+            Node* temp = head;
+            head = head -> next;
+            temp -> next = NULL;
+            delete temp;
+        }
+        else{
+            Node* curr= head;
+            Node* prev = NULL;
+            int cou= 1;
+            while( cou < posi){
+                prev =curr;
+                curr= curr -> next;
+                cou++;
+            }
+            prev -> next = curr ->next;
+            curr ->next = NULL;
+            delete curr;
+        }
+    }
+
+    bool circheck(Node* head){
+        if (head == NULL){
+            return true;
+        }
+        Node* temp = head -> next;
+        while( temp != NULL && temp!= head){
+            temp = temp ->next;
+        }
+        if (temp == head){
+            cout<< 1;
+            return true;
+
+        }
+        
+        return false;
+    }
+
+
+int main()
+{
+
+    Node* n1= new Node(3);
+    Node* head = n1;
+    Node* tail=  n1;
+    printnfo(head);
+    cout<<"\n";
+
+    insertAthead(head, 2);
+    printnfo(head);
+    cout<<"\n";
+    
+    insertAttail(tail,4);
+    printnfo(head);
+    cout<<"\n";
+
+    insertatposi(tail, head, 1, 1);
+    printnfo(head);
+    cout<<"\n";
+
+    insertatposi(tail, head, 3, 5);
+    printnfo(head);
+    cout<<"\n";
+
+    deleteatposi(head, 3);
+    printnfo(head);
+    cout<<"\n";
+
+    tail ->next = head ->next;
+
+    cout<<circheck(head)<<endl;
+    
+
+
+    return 0;
+
+}
