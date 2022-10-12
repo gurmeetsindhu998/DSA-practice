@@ -1,4 +1,19 @@
+/*
+linked list 
+covers - 
+1) creation of ll
+2) insert data in ll
+3) check is it circular ll
+4) finding loop using map and floyd algorithm
+5) finding starting point in a loop
+6) removing loop in ll
+
+*/
+
+
+
 #include<iostream>
+#include<map>
 using namespace std;
 
 class Node{
@@ -101,6 +116,78 @@ class Node{
         
         return false;
     }
+   
+
+    
+bool detectLoop(Node* head) {
+
+    if(head == NULL)
+        return false;
+
+    map<Node*, bool> visited;
+
+    Node* temp = head;
+
+    while(temp !=NULL) {
+
+        //cycle is present
+        if(visited[temp] == true) {
+
+            cout << "Present on element " << temp->data << endl;
+            return true;
+        }
+
+        visited[temp] = true;
+        temp = temp -> next;
+
+    }
+    return false;
+
+}
+
+    Node* floyddetectedcycle(Node* head){
+        if (head == NULL){
+            return NULL;
+        }
+        Node* slow =  head;
+        Node* fast = head;
+        while(slow != NULL && fast!= NULL){
+            fast = fast -> next;
+            if (fast !=NULL){
+                fast= fast ->next;
+            }
+            slow = slow -> next;
+            if(slow == fast){
+                return slow; 
+            } 
+        }
+        return NULL;
+        }
+    
+    Node* startingpoint(Node* head){
+        if (head == NULL)
+            return NULL;
+        Node* slow = head;
+        Node* intersectionpoint= floyddetectedcycle(head);
+        while(slow != intersectionpoint){
+            slow = slow ->next;
+            intersectionpoint= intersectionpoint->next;
+        }
+        return slow;
+
+    }
+
+    void removeloop(Node* head){
+        if (head == NULL)
+            return ;
+        Node* startpoint = startingpoint(head);
+        Node * temp = startpoint;
+        while(temp ->next != startpoint){
+            temp= temp -> next;
+        }
+        temp ->next = NULL;
+
+    }
 
 
 int main()
@@ -134,7 +221,30 @@ int main()
 
     tail ->next = head ->next;
 
-    cout<<circheck(head)<<endl;
+    if(detectLoop(head)== 0){
+        cout<<"No loop present"<<endl;
+    }
+    if (floyddetectedcycle(head) != NULL) {           
+        cout<<"loop is present "<< endl;
+    }
+
+    else{
+        cout<<"floyd No loop present"<<endl;
+    }
+
+    Node* loop = startingpoint(head);
+
+    cout << "loop starts at " << loop -> data  << endl;    
+
+    removeloop(head);
+
+     if (floyddetectedcycle(head) != NULL) {           
+        cout<<"loop is present "<< endl;
+    }
+
+    else{
+        cout<<"floyd No loop present"<<endl;
+    }
     
 
 
